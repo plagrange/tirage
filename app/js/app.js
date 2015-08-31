@@ -2,13 +2,13 @@
 
 /* App Module */
 
-var mtpApp = angular.module('mtpApp', [
+var tirageApp = angular.module('tirageApp', [
   'ngRoute',
   'tirageControllers',
   'tirageServices'
 ]);
 
-mtpApp.config(['$routeProvider',
+tirageApp.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
       when('/result', {
