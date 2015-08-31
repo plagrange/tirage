@@ -7,8 +7,6 @@ var tirageControllers = angular.module('tirageControllers', []);
 tirageControllers.controller('homeCtrl', ['$scope', '$routeParams', '$location',
   function($scope, $routeParams, $location) {
 
-
-
     $scope.ajouterLigne = function() {
       $scope.candidats.push({
         email: "",

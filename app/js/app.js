@@ -1,14 +1,13 @@
 'use strict';
-
 /* App Module */
 
-var tirageApp = angular.module('tirageApp', [
+var app = angular.module('tirageApp', [
   'ngRoute',
   'tirageControllers',
   'tirageServices'
 ]);
 
-tirageApp.config(['$routeProvider',
+app.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
       when('/result', {
