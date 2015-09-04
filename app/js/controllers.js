@@ -4,13 +4,13 @@
 
 var tirageControllers = angular.module('tirageControllers', []);
 
-tirageControllers.controller('homeCtrl', ['$scope', '$routeParams', '$location',
-  function($scope, $routeParams, $location) {
+tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
+  function($scope, $rootScope, $routeParams, $location) {
     var MIN_NB_LIGNE = 2
     var numLigne = 2;
 
     $scope.ajouterLigne = function() {
-      $scope.candidats.push({
+      $rootScope.candidats.push({
         id: numLigne++,
         email: "",
         pwd: ""
@@ -18,7 +18,7 @@ tirageControllers.controller('homeCtrl', ['$scope', '$routeParams', '$location',
     };
 
     $scope.init = function() {
-      $scope.candidats = [{
+      $rootScope.candidats = [{
         "id": "0",
         "email": "",
         "pwd": ""
@@ -30,23 +30,36 @@ tirageControllers.controller('homeCtrl', ['$scope', '$routeParams', '$location',
     };
 
     $scope.enableSupprimerLigne = function() {
-      return $scope.candidats.length > MIN_NB_LIGNE;
+      return $rootScope.candidats.length > MIN_NB_LIGNE;
     }
 
     $scope.supprimerLigne = function(p_candidat) {
 
-      // for (var i =0; i <   $scope.candidats.length; i++)
-      //  if (  $scope.candidats[i].id === p-) {
-      //     someArray.splice(i,1);
-      //     break;
-      //  }
-     $scope.candidats =  _.reject($scope.candidats, function(c){ return c.id == p_candidat.id; });
+
+      $rootScope.candidats = _.reject($rootScope.candidats, function(c) {
+        return c.id == p_candidat.id;
+      });
     };
 
     $scope.tirer = function(candidats) {
-      $location.path('/result:candidats');
+      $location.path('/result');
     };
+
 
 
   }
 ]);
+
+tirageControllers.controller('resultCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
+      function($scope, $rootScope, $routeParams, $location) {
+
+        $scope.faireTirage = function() {
+             var count=0;
+            for (var i =0; i <  $rootScope.candidats.length; i++){
+              $rootScope.candidats[i].passage = ++count;
+             }
+          };
+
+
+
+      }]);
