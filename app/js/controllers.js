@@ -6,8 +6,13 @@ var tirageControllers = angular.module('tirageControllers', []);
 
 tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
   function($scope, $rootScope, $routeParams, $location) {
-    var MIN_NB_LIGNE = 2
+
     var numLigne = 2;
+
+    var MIN_NB_LIGNE = 2;
+    var MAX_NB_LIGNE = 15;
+
+    $rootScope.isValide = false;
 
     $scope.ajouterLigne = function() {
       $rootScope.candidats.push({
@@ -32,10 +37,11 @@ tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams'
     $scope.enableSupprimerLigne = function() {
       return $rootScope.candidats.length > MIN_NB_LIGNE;
     }
+    $scope.enableAjouterLigne = function() {
+      return $rootScope.candidats.length < MAX_NB_LIGNE;
+    }
 
     $scope.supprimerLigne = function(p_candidat) {
-
-
       $rootScope.candidats = _.reject($rootScope.candidats, function(c) {
         return c.id == p_candidat.id;
       });
@@ -45,21 +51,22 @@ tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams'
       $location.path('/result');
     };
 
+    $scope.valider = function() {
+      $rootScope.isValide = true;
+    }
 
-
+    $scope.faireTirage = function() {
+      var count = 0;
+      for (var i = 0; i < $rootScope.candidats.length; i++) {
+        $rootScope.candidats[i].passage = ++count;
+      }
+    };
   }
 ]);
 
 tirageControllers.controller('resultCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
-      function($scope, $rootScope, $routeParams, $location) {
-
-        $scope.faireTirage = function() {
-             var count=0;
-            for (var i =0; i <  $rootScope.candidats.length; i++){
-              $rootScope.candidats[i].passage = ++count;
-             }
-          };
+  function($scope, $rootScope, $routeParams, $location) {
 
 
-
-      }]);
+  }
+]);
