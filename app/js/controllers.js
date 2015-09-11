@@ -4,8 +4,8 @@
 
 var tirageControllers = angular.module('tirageControllers', []);
 
-tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
-  function($scope, $rootScope, $routeParams, $location) {
+tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'Tirage',
+  function($scope, $rootScope, $routeParams, $location, Tirage) {
 
     var numLigne = 2;
 
@@ -18,7 +18,7 @@ tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams'
       $rootScope.candidats.push({
         id: numLigne++,
         email: "",
-        pwd: ""
+        secureCode: ""
       });
     };
 
@@ -26,11 +26,11 @@ tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams'
       $rootScope.candidats = [{
         "id": "0",
         "email": "",
-        "pwd": ""
+        "secureCode": ""
       }, {
         "id": "1",
         "email": "",
-        "pwd": ""
+        "secureCode": ""
       }];
     };
 
@@ -47,7 +47,8 @@ tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams'
       });
     };
 
-    $scope.tirer = function(candidats) {
+    $scope.tirer = function() {
+      Tirage.save({'compagny' :'compagny' , 'users' : $rootScope.candidats})
       $location.path('/result');
     };
 
