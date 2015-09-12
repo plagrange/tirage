@@ -4,7 +4,7 @@ var fpoly = angular.module('fpoly', []);
 
 
 /*
- * fAlert : displaying notification (using bootstrap alerts) for different level 
+ * fAlert : displaying notification (using bootstrap alerts) for different level
  *
  * Config object allow following configuration :
  *    - elementId : html ID of the element to add the notificaiton to - default 'messages'
@@ -78,4 +78,4 @@ fpoly.factory('fAlert', function ($timeout) {
             }
         }
     };
-});//end kNotification
+});//fAlert

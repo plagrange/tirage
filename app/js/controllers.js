@@ -4,8 +4,8 @@
 
 var tirageControllers = angular.module('tirageControllers', []);
 
-tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'Tirage',
-  function($scope, $rootScope, $routeParams, $location, Tirage) {
+tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'Tirage', 'fAlert',
+  function($scope, $rootScope, $routeParams, $location, Tirages, Tirage, Resultat, fAlert) {
 
     var numLigne = 2;
 
@@ -48,8 +48,23 @@ tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams'
     };
 
     $scope.tirer = function() {
-      Tirage.save({'compagny' :'compagny' , 'users' : $rootScope.candidats})
-      $location.path('/result');
+
+      var userList = "{initUserList:" + JSON.stringify($rootScope.candidats) + "}";
+      Tirages.save({
+          'company': 'company',
+          'users': userList
+        }, function success() {
+          fAlert.success("enregistrer avec succes !", {
+            timeout: 3000
+          });
+          // $location.path('/result');
+        },
+        function error() {
+          fAlert.error("une erreur s'est produite.", {
+            timeout: 3000
+          });
+        });
+
     };
 
     $scope.valider = function() {
@@ -65,9 +80,42 @@ tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams'
   }
 ]);
 
-tirageControllers.controller('resultCtrl', ['$scope', '$rootScope', '$routeParams', '$location',
-  function($scope, $rootScope, $routeParams, $location) {
+tirageControllers.controller('tirageCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'fAlert', 'Tirage',
+  function($scope, $rootScope, $routeParams, $location, fAlert, Tirage) {
+
+    $rootScope.candidat = {};
 
 
+    $scope.tirer = function() {
+      var data = JSON.stringify($rootScope.candidat);
+      Tirage.save(data, function success(data) {
+          // fAlert.success("enregistrer avec succes !", {timeout: 3000});
+          // $rootScope.candidats.push($rootScope.candidat);
+          alert(data)
+          $location.path('/result');
+        },
+        function error() {
+          fAlert.error("une erreur s'est produite.", {
+            timeout: 3000
+          });
+        });
+    };
+  }
+]);
+
+tirageControllers.controller('resultCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'fAlert', 'Resultat',
+  function($scope, $rootScope, $routeParams, $location, fAlert, Resultat) {
+
+    $scope.init = function() {
+      Resultat.query({
+        company: 'company'
+      }, function success(data) {
+        alert(data);
+      }, function error() {
+        fAlert.error("une erreur s'est produite.", {
+          timeout: 3000
+        });
+      });
+    }
   }
 ]);
