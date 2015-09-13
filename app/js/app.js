@@ -79,40 +79,72 @@ app.config(['$routeProvider',
 
 
 
+
 /**
  * Affiche un loader en cas d'appel distant
  */
-app.config(function ($provide, $httpProvider) {
-    $provide.factory('httpShowLoadingInterceptor', function ($q, $log, $rootScope, $injector) {
-        return {
-            request: function (config) {
-                $rootScope.showLoading = true;
-                return config || $q.when(config);
-            },
-            requestError: function (rejection){
-                $rootScope.showLoading = serviceInPending();
-                return $q.reject(rejection);
-            },
-            response: function (response) {
-                $rootScope.http = $rootScope.http || $injector.get('$http');
-                $rootScope.showLoading = serviceInPending();
-                return response || $q.when(response);
-            },
-            responseError : function (rejection) {
-                $rootScope.showLoading = serviceInPending();
-                return $q.reject(rejection);
-            }
-        };
+app.config(function($provide, $httpProvider) {
+  $provide.factory('httpShowLoadingInterceptor', function($q, $log, $rootScope, $injector) {
+    return {
+      request: function(config) {
+        $rootScope.showLoading = true;
+        return config || $q.when(config);
+      },
+      requestError: function(rejection) {
+        $rootScope.showLoading = serviceInPending();
+        return $q.reject(rejection);
+      },
+      response: function(response) {
+        $rootScope.http = $rootScope.http || $injector.get('$http');
+        $rootScope.showLoading = serviceInPending();
+        return response || $q.when(response);
+      },
+      responseError: function(rejection) {
+        $rootScope.showLoading = serviceInPending();
+        return $q.reject(rejection);
+      }
+    };
 
-        /**
-         * indique si des services sont en cours
-         * @returns {boolean}
-         */
-        function serviceInPending() {
-            $rootScope.http = $rootScope.http || $injector.get('$http');
-            return $rootScope.http.pendingRequests.length > 0;
+    /**
+     * indique si des services sont en cours
+     * @returns {boolean}
+     */
+    function serviceInPending() {
+      $rootScope.http = $rootScope.http || $injector.get('$http');
+      return $rootScope.http.pendingRequests.length > 0;
+    }
+  });
+
+  $httpProvider.interceptors.push('httpShowLoadingInterceptor');
+});
+
+/*
+ *configure log level
+ */
+app.config(function($logProvider, isDebug) {
+  if (!isDebug) {
+    $logProvider.debugEnabled(false);
+  }
+});
+
+//add http inteception for automatically log request/response
+app.config(function($provide, $httpProvider) {
+  $provide.factory('httpLogInterceptor', function($q, $log) {
+    return {
+      request: function(config) {
+        $log.debug('Call ' + config.method + ':' + config.url);
+        return config || $q.when(config);
+      },
+      response: function(response) {
+        var message = 'Response from ' + response.config.method + ':' + response.config.url + ' -> ' + response.status;
+        if (response.statusText !== undefined) {
+          message += ':' + response.statusText;
         }
-    });
+        $log.debug(message);
+        return response || $q.when(response);
+      }
+    };
+  });
 
-    $httpProvider.interceptors.push('httpShowLoadingInterceptor');
+  $httpProvider.interceptors.push('httpLogInterceptor');
 });

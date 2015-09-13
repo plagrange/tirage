@@ -4,8 +4,8 @@
 
 var tirageControllers = angular.module('tirageControllers', []);
 
-tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'Tirage', 'fAlert',
-  function($scope, $rootScope, $routeParams, $location, Tirages, Tirage, Resultat, fAlert) {
+tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'Tirages', 'fAlert',
+  function($scope, $rootScope, $routeParams, $location, Tirages, fAlert) {
 
     var numLigne = 2;
 
@@ -13,6 +13,7 @@ tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams'
     var MAX_NB_LIGNE = 15;
 
     $rootScope.isValide = false;
+    $scope.company = '';
 
     $scope.ajouterLigne = function() {
       $rootScope.candidats.push({
@@ -23,6 +24,7 @@ tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams'
     };
 
     $scope.init = function() {
+
       $rootScope.candidats = [{
         "id": "0",
         "email": "",
@@ -50,17 +52,18 @@ tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams'
     $scope.tirer = function() {
 
       var userList = "{initUserList:" + JSON.stringify($rootScope.candidats) + "}";
+      var company = $scope.company;
       Tirages.save({
-          'company': 'company',
+          'company': company,
           'users': userList
         }, function success() {
           fAlert.success("enregistrer avec succes !", {
             timeout: 3000
           });
-          // $location.path('/result');
         },
-        function error() {
-          fAlert.error("une erreur s'est produite.", {
+        function error(e) {
+          alert(e);
+          fAlert.error("une erreur s'est produite.\n" + e, {
             timeout: 3000
           });
         });
@@ -80,21 +83,22 @@ tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams'
   }
 ]);
 
-tirageControllers.controller('tirageCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'fAlert', 'Tirage',
-  function($scope, $rootScope, $routeParams, $location, fAlert, Tirage) {
+tirageControllers.controller('tirageCtrl', ['$scope', '$rootScope', '$routeParams', '$location',  '$log','fAlert', 'Tirage',
+  function($scope, $rootScope, $routeParams, $location, $log, fAlert, Tirage) {
 
     $rootScope.candidat = {};
 
-
     $scope.tirer = function() {
-      var data = JSON.stringify($rootScope.candidat);
-      Tirage.save(data, function success(data) {
-          // fAlert.success("enregistrer avec succes !", {timeout: 3000});
-          // $rootScope.candidats.push($rootScope.candidat);
-          alert(data)
+      var user = {
+        email: $rootScope.candidat.email,
+        secureCode: $rootScope.candidat.secureCode,
+        company: $rootScope.candidat.company
+      };
+      Tirage.save(user, function success(data) {
           $location.path('/result');
         },
-        function error() {
+        function error(e) {
+          $log.info(e);
           fAlert.error("une erreur s'est produite.", {
             timeout: 3000
           });
@@ -103,14 +107,19 @@ tirageControllers.controller('tirageCtrl', ['$scope', '$rootScope', '$routeParam
   }
 ]);
 
-tirageControllers.controller('resultCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'fAlert', 'Resultat',
-  function($scope, $rootScope, $routeParams, $location, fAlert, Resultat) {
+tirageControllers.controller('resultCtrl', ['$scope', '$rootScope', '$routeParams', '$location', '$log','fAlert', 'Resultat',
+  function($scope, $rootScope, $routeParams, $location, $log, fAlert, Resultat) {
 
+    $scope.resultats = [];
     $scope.init = function() {
+      $log.info('resultCtrl - charger les results');
+
       Resultat.query({
-        company: 'company'
+        email: $rootScope.candidat.email,
+        secureCode: $rootScope.candidat.secureCode,
+        company: $rootScope.candidat.company
       }, function success(data) {
-        alert(data);
+        $scope.resultats.push(data);
       }, function error() {
         fAlert.error("une erreur s'est produite.", {
           timeout: 3000

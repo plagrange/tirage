@@ -6,7 +6,7 @@
   <div class="col-md-8 col-md-push-2">
     <div class="page-header">
       <h3> Résultat du tirage
-        <small>les participants classés par ordre de passage</small>
+        <small>les participants classés par ordre de numéro tiré</small>
       </h3>
     </div>
 
@@ -24,9 +24,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="candidat in candidats | orderBy : 'passage' ">
-          <td class="text-center">{{candidat.passage}}</td>
-          <td class="text-center">{{candidat.email}}</td>
+        <tr ng-repeat="result in resultats | orderBy : 'numero' ">
+          <td class="text-center">{{result.numero}}</td>
+          <td class="text-center">{{result.email}}</td>
         </tr>
       </tbody>
     </table>
