@@ -4,8 +4,8 @@
 
 var tirageControllers = angular.module('tirageControllers', []);
 
-tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams', '$location', 'Tirages', 'fAlert',
-  function($scope, $rootScope, $routeParams, $location, Tirages, fAlert) {
+tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams', '$location','$log', 'Tirages', 'fAlert',
+  function($scope, $rootScope, $routeParams, $location,$log, Tirages, fAlert) {
 
     var numLigne = 2;
 
@@ -62,7 +62,7 @@ tirageControllers.controller('homeCtrl', ['$scope', '$rootScope', '$routeParams'
           });
         },
         function error(e) {
-          alert(e);
+          $log.info(e);
           fAlert.error("une erreur s'est produite.\n" + e, {
             timeout: 3000
           });
