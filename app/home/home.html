@@ -18,21 +18,21 @@
       <div class="form-group">
         <label class="col-sm-2 control-label text-left" for="idInputGroupe">Nom du tirage</label>
         <div class="col-sm-9">
-          <input type="text" class="form-control" id="idInputGroupe" ng-disabled="isValide==true" ng-model="company">
+          <input type="text" class="form-control" id="idInputGroupe" ng-model="company">
         </div>
       </div>
 
       <div class="form-group" ng-repeat="candidat in candidats">
         <!-- <div class="form-inline"> -->
         <div class="col-sm-6">
-          <input type="text" class="form-control" ng-model="candidat.email" placeholder="email du participant" ng-disabled="isValide==true">
+          <input type="text" class="form-control" ng-model="candidat.email" placeholder="email du participant">
         </div>
         <div class="col-sm-5">
-          <input type="text" class="form-control" ng-model="candidat.secureCode" placeholder="mot de passe" ng-disabled="isValide==true">
+          <input type="text" class="form-control" ng-model="candidat.secureCode" placeholder="Code secret">
         </div>
 
         <div class="col-sm-1" style="padding: 5px 5px 1px 1px; width: auto;">
-          <button type="button" class="close" aria-label="Close" ng-click="supprimerLigne(candidat)" ng-show="enableSupprimerLigne() && !isValide">
+          <button type="button" class="close" aria-label="Close" ng-click="supprimerLigne(candidat)" ng-show="enableSupprimerLigne()">
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
           </button>
         </div>
@@ -42,24 +42,23 @@
         <div class="col-sm-12">
           <div class="pull-right col-sm-1" style="margin-right: 15px;">
             <button class="btn btn-default btn-circle btn-lg" type="button" ng-click="ajouterLigne()"
-            ng-hide="isValide==true" ng-disabled="enableAjouterLigne()==false">
+             ng-disabled="enableAjouterLigne()==false">
               <i class="glyphicon glyphicon-plus"></i></button>
-            <button class="btn btn-default btn-circle btn-lg" type="button" ng-click="isValide=false;"
-            ng-hide="isValide==false">
-              <i class="glyphicon glyphicon-edit"></i></button>
+            <!-- <button class="btn btn-default btn-circle btn-lg" type="button">
+              <i class="glyphicon glyphicon-edit"></i></button> -->
           </div>
         </div>
       </div>
 
       <!--  buttons-->
-      <div class="form-group" ng-show="!isValide">
+      <!-- <div class="form-group" ng-show="!isValide">
         <div class="col-sm-11">
           <button class="btn btn-info btn-block btn-lg" type="button" ng-click="isValide=true;" >Valider</button>
         </div>
-      </div>
-      <div class="form-group" ng-hide="!isValide">
+      </div> -->
+      <div class="form-group">
         <div class="col-sm-11">
-          <button class="btn btn-success btn-block btn-lg" type="submit" ng-click="faireTirage();tirer()">Lancer le tirage
+          <button class="btn btn-info btn-block btn-lg" type="submit" ng-click="create()"> valider
           </button>
         </div>
       </div>

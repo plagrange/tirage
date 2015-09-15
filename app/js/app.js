@@ -56,7 +56,7 @@ var app = angular.module('tirageApp', [
 app.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
-    when('/result', {
+    when('/result/:company/:email', {
       templateUrl: 'result/result.html',
       controller: 'resultCtrl'
     }).
@@ -64,7 +64,15 @@ app.config(['$routeProvider',
       templateUrl: 'home/home.html',
       controller: 'homeCtrl'
     }).
+    when('/tirage-dashboard', {
+      templateUrl: 'tirageDashboard/tirage-dashboard.html',
+      controller: 'tirage-dashboardCtrl'
+    }).
     when('/tirage', {
+      templateUrl: 'tirage/tirage.html',
+      controller: 'tirageCtrl'
+    }).
+    when('/tirage/:company/:email', {
       templateUrl: 'tirage/tirage.html',
       controller: 'tirageCtrl'
     }).
