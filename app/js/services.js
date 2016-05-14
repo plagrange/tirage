@@ -7,7 +7,7 @@ var tirageServices = angular.module('tirageServices', ['ngResource']);
 // http://lagrangien.jelastic.servint.net/tiragebom/webapi/tirage/initparticipants
 
 tirageServices.factory('Tirages', ['$resource', function($resource) {
-  return $resource('https://89.83.9.50/tiragebom/webapi/tirage/createtirage', {}, {
+  return $resource('https://88.181.108.222/backoffice/createtirage', {}, {
     save: {
       method: 'POST',
       headers: {
@@ -18,7 +18,7 @@ tirageServices.factory('Tirages', ['$resource', function($resource) {
 }]);
 
 tirageServices.factory('Tirage', ['$resource', function($resource) {
-  return $resource('https://89.83.9.50/tiragebom/webapi/tirage/tire', {}, {
+  return $resource('https://88.181.108.222/tirage/tire', {}, {
     save: {
       method: 'POST',
       headers: {
@@ -29,7 +29,7 @@ tirageServices.factory('Tirage', ['$resource', function($resource) {
 }]);
 
 tirageServices.factory('Resultats', ['$resource', function($resource) {
-  return $resource('https://89.83.9.50/tiragebom/webapi/tirage/results/:company', {}, {
+  return $resource('https://88.181.108.222/backoffice/results/:company', {}, {
     'query': {
       method: 'GET', isArray:true
     }
@@ -37,9 +37,17 @@ tirageServices.factory('Resultats', ['$resource', function($resource) {
 }]);
 
 tirageServices.factory('Resultat', ['$resource', function($resource) {
-  return $resource('https://89.83.9.50/tiragebom/webapi/tirage/result/:email/:secureCode/:company', {}, {
+  return $resource('https://88.181.108.222/backoffice/result/:email/:secureCode/:company', {}, {
     'query': {
       method: 'GET', isArray:false
+    }
+  });
+}]);
+
+tirageServices.factory('Compagny', ['$resource', function($resource) {
+  return $resource('https://88.181.108.222/backoffice/verifycompany/:company', {}, {
+    'query': {
+      method: 'GET', isArray:true
     }
   });
 }]);
